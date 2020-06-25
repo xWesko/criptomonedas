@@ -1,2 +1,2 @@
-# criptomonedas
-Cotizador de criptomonedas 
+# Criptomonedas
+Cotizador de criptomonedas en React Native 🌀
