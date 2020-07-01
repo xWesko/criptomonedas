@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TouchableHighlight } from 'react-native';
+import { Text, View, StyleSheet, TouchableHighlight, Alert } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import axios from 'axios';
 
 
-const Formulario = () => {
+const Formulario = ({ moneda, criptoMoneda, guardarMoneda, guardarCriptoMoneda, guardarConsultarAPI}) => {
 
-    const [moneda, guardarMoneda] = useState('');
-    const [criptoMoneda, guardarCriptoMoneda] = useState('');
-    const [criptoMonedas, guardarCriptoMonedas] = useState('');
+    const [criptoMonedas, guardarCriptoMonedas] = useState([]);
 
     useEffect(() => {
         const consultarAPI = async () => {
@@ -27,7 +25,26 @@ const Formulario = () => {
         guardarCriptoMoneda(cripto)
     }
     const cotizarPrecio = () => {
-        console.log('cotizando...');
+       if(moneda.trim() === '' || criptoMoneda.trim() === ''){
+           mostrarAlerta();
+           return;
+        }
+        // Cambiar el state de consultar API
+        guardarConsultarAPI(true)
+
+
+
+    }
+    
+
+    const mostrarAlerta = () => {
+        Alert.alert(
+            'Error',
+            'Ambos campos son obligatorios',
+            [
+                {tex: 'OK'}
+            ]
+        )
     }
 
     return (
@@ -59,10 +76,10 @@ const Formulario = () => {
             </Picker>
 
             <TouchableHighlight 
-                styles={styles.btnCotizar}
-                onPress={  () => coti }
+                style={styles.btnCotizar}
+                onPress={  () => cotizarPrecio() }
             >
-                <Text styles={styles.textoCotizar}> Cotizar </Text>
+                <Text style={styles.txtCotizar}> Cotizar </Text>
             </TouchableHighlight>
 
 
@@ -82,12 +99,13 @@ const styles = StyleSheet.create({
         fontSize: 22,
         marginVertical: 20,
     },
-    btnCotizar:{
+    btnCotizar: {
         backgroundColor: '#5E49E2',
         padding: 10,
-        marginTop: 20
+        marginTop: 20,
+        width: '100%'
     },
-    textoCotizar:{
+    txtCotizar: {
         color: '#fff',
         fontSize: 18,
         fontFamily: 'Lato-Black',
